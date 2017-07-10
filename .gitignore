@@ -32,6 +32,8 @@
 npm-debug.log
 testem.log
 /typings
+
+# Hidden Converter
 /centrica_converter
 /run-python.js
 
