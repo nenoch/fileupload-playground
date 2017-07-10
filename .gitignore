@@ -32,6 +32,8 @@
 npm-debug.log
 testem.log
 /typings
+/centrica_converter
+/run-python.js
 
 # e2e
 /e2e/*.js
