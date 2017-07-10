@@ -1,8 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import 'rxjs/Rx';
-import { Observable } from 'rxjs';
 import { NgForm } from '@angular/forms';
+import { UploadService } from '../upload.service';
 
 @Component({
   selector: 'app-file-selector',
@@ -18,40 +16,23 @@ export class FileSelectorComponent implements OnInit {
 
   @Output() showState: EventEmitter<Boolean> = new EventEmitter();
 
-  constructor(private http: Http) { };
+  constructor(private uploadService: UploadService) { };
 
   ngOnInit() {
   }
 
   private onSubmit(form: NgForm) {
-    // TODO call to backend service, converting files to a csv
     console.dir(this.files);
-    this.hideHandler();
+    this.uploadService.postFiles(this.files).subscribe(data => {
+      console.log(data); // TODO figure out proper frontend response
+    })
+    // this.hideHandler();
   }
 
   private onChange(event) {
     console.log(event);
     this.files = event.target.files || [];
     this.files.length === 0 ? this.filesChosen = false : this.filesChosen = true;
-    let formData = new FormData();
-    if (this.files.length > 0) {
-        for (let i = 0; i < this.files.length; i++) {
-            formData.append('file[]', this.files[i]);
-        }
-        this.http
-            .post('/src/assets', formData)
-            .map(res => res.json())
-            .catch(error => Observable.throw(error))
-            .subscribe(
-                data => console.log('success'),
-                error => console.log(error)
-            )
-    }
-    // let reader = new FileReader;
-    // for (let file of this.files){
-    //   console.log(reader.readAsDataURL(file));
-    // }
-    console.log("files", this.files);
   }
 
   private hideHandler() {
